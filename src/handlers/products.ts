@@ -1,0 +1,77 @@
+import express, { Request, Response } from 'express';
+import { Product, ProductStore } from '../models/products';
+import { verifyAuthToken } from './verifyAuthToken';
+
+const store = new ProductStore();
+
+const index = async (_req: Request, res: Response) => {
+  try {
+    const products = await store.index();
+    res.json(products);
+  } catch (err: any) {
+    console.log(err);
+    res.status(404).json({ error: err.message });
+  }
+};
+
+const show = async (req: Request, res: Response) => {
+  try {
+    const products = await store.show(req.params.id);
+    res.json(products);
+  } catch (err: any) {
+    console.log(err);
+    res.status(404).json({ error: err.message });
+  }
+};
+
+const create = async (req: Request, res: Response) => {
+  const products: Product = {
+    id: req.body.id,
+    name: req.body.name,
+    price: req.body.price,
+  };
+  try {
+    const newProduct = await store.create(products);
+    res.json(newProduct);
+  } catch (err: any) {
+    console.log(err);
+    res.status(404).json({ error: err.message });
+  }
+};
+
+const destroy = async (req: Request, res: Response) => {
+  try {
+    const isValidId = await store.show(req.params.id);
+    if (isValidId) {
+      const deleted = await store.delete(req.params.id);
+      res.send('Product deleted');
+      res.json(deleted);
+    }
+  } catch (err: any) {
+    console.log(err);
+    res.status(404).json({ error: err.message });
+  }
+};
+
+const addProduct = async (req: Request, res: Response) => {
+  const orderId: number = req.body.order_id;
+  const productId: number = req.body.product_id;
+  const quantity: number = req.body.quantity;
+  try {
+    const newProduct = await store.addProduct(quantity, orderId, productId);
+    res.json(newProduct);
+  } catch (err: any) {
+    console.log(err);
+    res.status(404).json({ error: err.message });
+  }
+};
+
+const productRoutes = (app: express.Application) => {
+  app.get('/products', index);
+  app.get('/products/:id', show);
+  app.post('/products/create', verifyAuthToken, create);
+  app.post('/products/:id/orders', verifyAuthToken, addProduct);
+  app.delete('/products/delete/:id', verifyAuthToken, destroy);
+};
+
+export default productRoutes;
