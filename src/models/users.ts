@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 const { BCRYPT_PASSWORD, SALT_ROUNDS } = process.env;
 
 export type User = {
-  id: Number;
+  id?: Number;
   firstname: string;
   lastname: string;
   passwords: string;
@@ -41,7 +41,7 @@ export class UserStore {
   async create(u: User): Promise<User> {
     try {
       const sql =
-        'INSERT INTO users(id, firstname, lastname, passwords) VALUES ($1, $2, $3, $4) RETURNING *';
+        'INSERT INTO users(firstname, lastname, passwords) VALUES ($1, $2, $3) RETURNING *';
       const conn = await Client.connect();
 
       const hash = bcrypt.hashSync(
@@ -49,12 +49,7 @@ export class UserStore {
         parseInt(SALT_ROUNDS as string)
       );
 
-      const result = await conn.query(sql, [
-        u.id,
-        u.firstname,
-        u.lastname,
-        hash,
-      ]);
+      const result = await conn.query(sql, [u.firstname, u.lastname, hash]);
       const user = result.rows[0];
       conn.release();
       return user;

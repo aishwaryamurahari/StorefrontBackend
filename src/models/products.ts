@@ -1,7 +1,7 @@
 import Client from '../database';
 
 export type Product = {
-  id: Number;
+  id?: Number;
   name: string;
   price: Number;
 };
@@ -37,9 +37,9 @@ export class ProductStore {
   async create(p: Product): Promise<Product> {
     try {
       const sql =
-        'INSERT INTO products(id, name, price) VALUES ($1, $2, $3) RETURNING *';
+        'INSERT INTO products( name, price) VALUES ($1, $2) RETURNING *';
       const conn = await Client.connect();
-      const result = await conn.query(sql, [p.id, p.name, p.price]);
+      const result = await conn.query(sql, [p.name, p.price]);
       const product = result.rows[0];
       conn.release();
       return product;

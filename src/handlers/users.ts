@@ -27,13 +27,13 @@ const show = async (req: Request, res: Response) => {
 };
 
 const create = async (_req: Request, res: Response) => {
-  const users: User = {
-    id: _req.body.id,
-    firstname: _req.body.firstname,
-    lastname: _req.body.lastname,
-    passwords: _req.body.passwords,
-  };
   try {
+    const users: User = {
+      firstname: _req.body.firstname,
+      lastname: _req.body.lastname,
+      passwords: _req.body.passwords,
+    };
+
     if (!users.firstname || !users.lastname || !users.passwords) {
       res.status(404);
       res.send('Invalid firstname or lastname or password');
@@ -50,7 +50,6 @@ const create = async (_req: Request, res: Response) => {
 
 const authenticate = async (req: Request, res: Response) => {
   const users: User = {
-    id: req.body.id,
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     passwords: req.body.passwords,
@@ -77,13 +76,12 @@ const authenticate = async (req: Request, res: Response) => {
 const destroy = async (req: Request, res: Response) => {
   try {
     const isValidId = await store.show(req.params.id);
-
     if (isValidId) {
-      const deleted = await store.delete(req.params.id);
+      await store.delete(req.params.id);
       res.send('User deleted');
-      res.json(deleted);
+      //res.json(deleted);
     }
-    return true;
+    //return;
   } catch (err: any) {
     console.log(err);
     res.status(404).json({ error: err.message });

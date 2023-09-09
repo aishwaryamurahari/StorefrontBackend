@@ -25,12 +25,11 @@ const show = async (req: Request, res: Response) => {
 };
 
 const create = async (req: Request, res: Response) => {
-  const orders: Order = {
-    id: req.body.id,
-    status: req.body.status,
-    user_id: req.body.user_id,
-  };
   try {
+    const orders: Order = {
+      status: req.body.status,
+      user_id: req.body.user_id,
+    };
     const newOrder = await store.create(orders);
     res.json(newOrder);
   } catch (err: any) {
@@ -43,9 +42,8 @@ const destroy = async (req: Request, res: Response) => {
   try {
     const isValidId = await store.show(req.params.id);
     if (isValidId) {
-      const deleted = await store.delete(req.params.id);
+      await store.delete(req.params.id);
       res.send('Order deleted');
-      res.json(deleted);
     }
   } catch (err: any) {
     console.log(err);

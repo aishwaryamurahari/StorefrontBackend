@@ -25,12 +25,11 @@ const show = async (req: Request, res: Response) => {
 };
 
 const create = async (req: Request, res: Response) => {
-  const products: Product = {
-    id: req.body.id,
-    name: req.body.name,
-    price: req.body.price,
-  };
   try {
+    const products: Product = {
+      name: req.body.name,
+      price: req.body.price,
+    };
     const newProduct = await store.create(products);
     res.json(newProduct);
   } catch (err: any) {
@@ -43,9 +42,8 @@ const destroy = async (req: Request, res: Response) => {
   try {
     const isValidId = await store.show(req.params.id);
     if (isValidId) {
-      const deleted = await store.delete(req.params.id);
+      await store.delete(req.params.id);
       res.send('Product deleted');
-      res.json(deleted);
     }
   } catch (err: any) {
     console.log(err);

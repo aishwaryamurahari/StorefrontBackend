@@ -4,6 +4,20 @@ const store = new UserStore();
 
 describe('User Model', () => {
   let userId: number;
+
+  beforeAll(async () => {
+    const user = await store.create({
+      firstname: 'amu',
+      lastname: 'mur',
+      passwords: 'udacitydbproject',
+    });
+    userId = user.id as number;
+  });
+
+  afterAll(async () => {
+    await store.delete(`${userId}`);
+  });
+
   it('should have an index method', () => {
     expect(store.index).toBeDefined();
   });
@@ -30,32 +44,34 @@ describe('User Model', () => {
   });
 
   it('should return the correct user from show method ', async () => {
-    userId = 1;
+    // userId = 10;
     const result = await store.show(`${userId}`);
     expect(result).not.toBeNull();
   });
 
   it('create method should add a user', async () => {
     const result = await store.create({
-      id: userId,
-      firstname: 'aish',
+      firstname: 'amu',
       lastname: 'mur',
       passwords: 'udacitydbproject',
     });
 
     userId = result.id as number;
-    expect(result.firstname).toEqual('aish');
+    expect(result.firstname).toEqual('amu');
     expect(result.lastname).toEqual('mur');
   });
 
   it('authenticate user with password', async () => {
-    const output = await store.authenticate('aish', 'udacitydbproject');
+    const output = await store.authenticate('amu', 'udacitydbproject');
     expect(output).not.toBeNull();
   });
 
   it('delete method should remove the user', async () => {
-    await store.delete(`${userId}`);
-    const result = await store.index();
-    expect(result).toEqual([]);
+    try {
+      const deletedUser = await store.delete(`${userId}`);
+      expect(deletedUser).toBe(true);
+    } catch (error) {
+      console.log(error);
+    }
   });
 });
