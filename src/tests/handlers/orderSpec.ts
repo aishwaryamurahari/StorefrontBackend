@@ -1,35 +1,19 @@
 import express from 'express';
 import request from 'supertest';
-//import supertest from 'supertest';
 import orderRoutes from '../../handlers/orders';
 import userRoutes from '../../handlers/users';
 import jwt from 'jsonwebtoken';
 
 const app = express();
-//const req = supertest(app);
 app.use(express.json());
 userRoutes(app);
 orderRoutes(app);
 
 const { TOKEN_SECRET } = process.env;
 
-describe('User Routes', () => {
+describe('Order Routes', () => {
   let token: string, userId: number, orderId: number;
   beforeAll(async () => {
-    //     const user_test = await request(app).post('/users/create').send({
-    //       firstname: 'aish',
-    //       lastname: 'mur',
-    //       passwords: 'udacitydbproject',
-    //     });
-    //     const { body } = user_test;
-    //     console.log('userTest', user_test);
-    //     token = body;
-    //     const payload = jwt.verify(token, TOKEN_SECRET as string);
-    //     console.log('payload', payload);
-    //     // @ts-ignore
-    //     const user = payload.user;
-    //     userId = user.id;
-    //   });
     const newUser = {
       firstname: 'amu',
       lastname: 'mur',
@@ -40,7 +24,6 @@ describe('User Routes', () => {
     const { body } = response;
     token = body;
     const payload = jwt.verify(token, TOKEN_SECRET as string);
-    console.log('payload', payload);
     // @ts-ignore
     const user = payload.user;
     userId = user.id;
@@ -63,12 +46,6 @@ describe('User Routes', () => {
       .post('/orders/create')
       .set('Authorization', 'Bearer ' + token)
       .send(newOrder);
-    // const { body } = response;
-    // token = body;
-    // const payload = jwt.verify(token, TOKEN_SECRET as string);
-    // // @ts-ignore
-    // const order = payload.order;
-    // console.log(order.id);
 
     orderId = response.body.id;
 
@@ -81,18 +58,6 @@ describe('User Routes', () => {
   });
 
   it('should return a specific order when GET /orders/:id is called', async () => {
-    // orderId = 6;
-    // const newOrder = {
-    //   status: 'processed',
-    //   user_id: userId,
-    // };
-    // console.log('token', token);
-    // const response = await request(app)
-    //   .post('/orders/create')
-    //   .set('Authorization', 'Bearer ' + token)
-    //   .send(newOrder);
-    // orderId = response.body.id;
-    // console.log('orderId', orderId);
     const showId = await request(app).get(`/orders/${orderId}`);
     expect(showId.status).toBe(200);
   });

@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { Product, ProductStore } from '../models/products';
+import { Product, ProductOrder, ProductStore } from '../models/products';
 import { verifyAuthToken } from './verifyAuthToken';
 
 const store = new ProductStore();
@@ -52,11 +52,13 @@ const destroy = async (req: Request, res: Response) => {
 };
 
 const addProduct = async (req: Request, res: Response) => {
-  const orderId: number = req.body.order_id;
-  const productId: number = req.body.product_id;
-  const quantity: number = req.body.quantity;
   try {
-    const newProduct = await store.addProduct(quantity, orderId, productId);
+    const productOrder: ProductOrder = {
+      order_id: req.body.order_id,
+      product_id: req.body.product_id,
+      quantity: req.body.quantity,
+    };
+    const newProduct = await store.addProduct(productOrder);
     res.json(newProduct);
   } catch (err: any) {
     console.log(err);

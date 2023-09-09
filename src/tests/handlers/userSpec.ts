@@ -13,20 +13,6 @@ describe('User Routes', () => {
   let token: string, userId: number;
 
   beforeAll(async () => {
-    //     const user_test = await request(app).post('/users/create').send({
-    //       firstname: 'aish',
-    //       lastname: 'mur',
-    //       passwords: 'udacitydbproject',
-    //     });
-    //     const { body } = user_test;
-    //     console.log('userTest', user_test);
-    //     token = body;
-    //     const payload = jwt.verify(token, TOKEN_SECRET as string);
-    //     console.log('payload', payload);
-    //     // @ts-ignore
-    //     const user = payload.user;
-    //     userId = user.id;
-    //   });
     const newUser = {
       firstname: 'amu',
       lastname: 'mur',
@@ -37,7 +23,6 @@ describe('User Routes', () => {
     const { body } = response;
     token = body;
     const payload = jwt.verify(token, TOKEN_SECRET as string);
-    console.log('payload', payload);
     // @ts-ignore
     const user = payload.user;
     userId = user.id;

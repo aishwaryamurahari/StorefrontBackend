@@ -61,7 +61,6 @@ const authenticate = async (req: Request, res: Response) => {
       return false;
     }
     const authUser = await store.authenticate(users.firstname, users.passwords);
-    console.log(authUser);
     if (!authUser) {
       res.send(`Cannot authenticate user ${users.firstname} `);
       return false;

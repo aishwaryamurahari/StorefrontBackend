@@ -11,7 +11,6 @@ export const verifyAuthToken = (
   try {
     const authorizationHeader: any = req.headers.authorization;
     const token = authorizationHeader.split(' ')[1];
-    console.log(token);
     jwt.verify(token, TOKEN_SECRET as string);
     next();
   } catch (error) {
