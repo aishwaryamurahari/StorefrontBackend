@@ -54,9 +54,9 @@ const destroy = async (req: Request, res: Response) => {
 const addProduct = async (req: Request, res: Response) => {
   try {
     const productOrder: ProductOrder = {
+      quantity: req.body.quantity,
       order_id: req.body.order_id,
       product_id: req.body.product_id,
-      quantity: req.body.quantity,
     };
     const newProduct = await store.addProduct(productOrder);
     res.json(newProduct);
