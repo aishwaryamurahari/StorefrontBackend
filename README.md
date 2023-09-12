@@ -43,5 +43,10 @@ After start up, the server will start on port 3000 and the database on port 5432
 1. Install dependencies from the package.json
    npm install
 
-2. Run the migrations to create the database
+2. npx tsc
+
+3. Run the migrations to create the database
    db-migrate up
+
+4. To start the server on watch mode
+   npm run watch
