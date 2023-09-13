@@ -63,3 +63,58 @@ The above url will delete a user upon passing the required ID and token.
 
 -Delete: http://localhost:3000/orders/delete/:id
 The above url will delete a order upon passing the required ID and token.
+
+## Data Shapes
+
+# Product
+
+- id
+
+- name
+
+- price
+
+- name VARCHAR(10), price integer, id SERIAL PRIMARY KEY
+
+- Referenced by:
+  TABLE "product_orders" CONSTRAINT "product_orders_product_id_fkey" FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+
+# User
+
+- id
+
+- firstname
+
+- lastname
+
+- passwords
+
+id SERIAL PRIMARY KEY, firstname VARCHAR(10), lastname VARCHAR(10), passwords VARCHAR(100)
+
+# Orders
+
+- id
+
+- user_id
+
+- status of order
+
+- id SERIAL PRIMARY KEY, status of order VARCHAR(10), user_id integer
+
+- Referenced by:
+  TABLE "product_orders" CONSTRAINT "product_orders_order_id_fkey" FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+
+# product-orders
+
+- id
+
+- quantity
+
+- order_id
+
+- product_id
+
+- id SERIAL PRIMARY KEY, quantity integer, order_id integer, product_id integer
+  Foreign-key constraints:
+  "product_orders_order_id_fkey" FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+  "product_orders_product_id_fkey" FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
